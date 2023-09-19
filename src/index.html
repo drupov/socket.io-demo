@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Socket.io Demo</title>
+  </head>
+  <body>
+    <h1>Socket.io Demo</h1>
+    <!-- Button to send a message to the server -->
+    <button type="submit" id="submit">Send message</button>
+
+    <!-- Include the Socket.io client-side library -->
+    <script src="socket.io/socket.io.js"></script>
+    <script>
+      // Initialize the client-side socket connection
+      const socket = io()
+
+      // Log the client's socket ID when connected
+      socket.on('connect', () => console.log(`Client socket id: ${socket.id}`))
+
+      // Get the button by its ID
+      let submit = document.getElementById('submit')
+
+      // Add an event listener to the button to send a message when clicked
+      submit.addEventListener('click', () => {
+        socket.emit('clientMessage', `Hello from client with id ${socket.id}`)
+      })
+
+      // Listen for messages from the server and log them
+      socket.on('serverMessage', (message) =>
+        console.log(`Server message "${message}"`)
+      )
+
+      // General listener for any event. Useful for debugging.
+      const listener = (eventName, ...args) => {
+        console.log(eventName, args)
+      }
+      socket.onAny(listener)
+    </script>
+  </body>
+</html>
