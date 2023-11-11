@@ -7,8 +7,11 @@
   </head>
   <body>
     <h1>Socket.io Demo</h1>
-    <!-- Button to send a message to the server -->
-    <button type="submit" id="submit">Send message</button>
+    <!-- Form to send a message to the server -->
+    <form id="myForm">
+      <input type="text" id="textField" placeholder="Enter text here" />
+      <button type="submit">Submit</button>
+    </form>
 
     <!-- Include the Socket.io client-side library -->
     <script src="socket.io/socket.io.js"></script>
@@ -20,11 +23,18 @@
       socket.on('connect', () => console.log(`Client socket id: ${socket.id}`))
 
       // Get the button by its ID
-      let submit = document.getElementById('submit')
+      const form = document.getElementById('myForm')
 
       // Add an event listener to the button to send a message when clicked
-      submit.addEventListener('click', () => {
-        socket.emit('clientMessage', `Hello from client with id ${socket.id}`)
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault()
+
+        const textFieldValue = document.getElementById('textField').value
+        socket.emit('clientMessage', {
+          clientId: socket.id,
+          message: textFieldValue,
+        })
       })
 
       // Listen for messages from the server and log them

@@ -24,9 +24,14 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => console.log(`User ${socket.id} disconnected`))
 
   // Event listener for messages from the client
-  socket.on('clientMessage', (message) =>
-    console.log(`Client message "${message}"`)
-  )
+  socket.on('clientMessage', (message) => {
+    //console.log(`Client message "${message}"`)
+    console.log(message)
+    io.emit(
+      'client has written',
+      `Received message from ${message.clientId}: ${message.message}`
+    )
+  })
 
   // Send a message to the connected client
   socket.emit('serverMessage', 'Hello from server')
